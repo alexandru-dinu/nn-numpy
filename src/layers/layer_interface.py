@@ -15,5 +15,8 @@ class LayerInterface:
     def update_parameters(self, alpha):
         pass
 
-    def to_string(self):
+    def __str__(self):
         pass
+    
+    def __repr__(self):
+        return str(self)

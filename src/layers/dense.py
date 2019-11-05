@@ -2,13 +2,16 @@ import numpy as np
 from layer_interface import LayerInterface
 
 
-class FCLayer(LayerInterface):
+class Dense(LayerInterface):
     def __init__(self, num_inputs, num_outputs, activation):
+        """
+        z = Wx + b
+        y = f(z)
+        """
+        
         self.num_inputs = num_inputs
         self.num_outputs = num_outputs
         self.f = activation
-
-        # y = f(z); z = Wx + b
 
         self.weights = np.random.normal(
             0,
@@ -30,7 +33,7 @@ class FCLayer(LayerInterface):
         self.grad_biases = np.zeros(self.biases.shape)
 
     def forward(self, x):
-        assert (x.shape == (self.num_inputs, 1))
+        assert (x.shape == (self.num_inputs, 1)) # TODO
 
         self.z = np.dot(self.weights, x) + self.biases
         self.outputs = self.f(self.z)
@@ -47,13 +50,14 @@ class FCLayer(LayerInterface):
 
         grad_inputs = np.dot(self.weights.T, aux).T
 
-        print(f"aux {aux.shape}, z {self.z.shape} gw {self.grad_weights.shape}, gx {grad_inputs.shape}")
-
         return grad_inputs
 
     def update_parameters(self, alpha):
         self.weights -= alpha * self.grad_weights
         self.biases -= alpha * self.grad_biases
 
-    def to_string(self):
-        return "[FC (%s -> %s) | %s]" % (self.num_inputs, self.num_outputs, self.f.__name__)
+    def __str__(self):
+        return "[Dense (%s -> %s) | %s]" % (self.num_inputs, self.num_outputs, self.f.__name__)
+    
+    def __repr__(self):
+        return str(self)

@@ -3,12 +3,16 @@ class Network:
         self.layers = layers
         self.num_layers = len(self.layers)
 
+        
     def forward(self, x):
         prev_x = x
+        
         for layer in self.layers:
             prev_x = layer.forward(prev_x)
+            
         return prev_x
 
+    
     def backward(self, x, out):
         crt_err = out
 
@@ -20,9 +24,15 @@ class Network:
 
         self.layers[0].backward(x, crt_err)
 
+        
     def update_parameters(self, alpha):
         for layer in self.layers:
             layer.update_parameters(alpha)
 
-    def to_string(self):
-        return " -> ".join(map(lambda l: l.to_string(), self.layers))
+            
+    def __str__(self):
+        return " -> ".join(map(str, self.layers))
+    
+    
+    def __repr__(self):
+        return str(self)
